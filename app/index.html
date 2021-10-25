@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Home</h2>
+        <select id="select">
+          <option value="">Test1</option>
+          <option value="">Test2</option>
+          <option value="">Test3</option>
+          <option value="">Test4</option>
+        </select>
+        <h2>Edit home</h2>
+        <div class="input-style">
+            <input required type="text"   id="val" name="" placeholder="Enter the home name" value="" >
+            <button onclick="insertValue();">Save</button>
+        </div>
+
+
+      <script>
+          /*
+          function fun1() {
+          let sel = document.getElementById('mySelect').selectedIndex;
+          let options= document.getElementById('mySelect').options;
+        console.log('current Function ' +options[sel].text);
+        }
+        document.querySelector('button').onclick = btnClick;*/
+
+        function insertValue () {
+          let select = document.getElementById('select'),
+            txtVal = document.getElementById('val').value;
+            let sel = document.getElementById('select').selectedIndex;
+            let options= document.getElementById('select').options;
+            newOption = ('current Function ' +options[sel].text),
+            newOptionVal = document.createTextNode(txtVal);
+
+            newOption.replaceWith(newOptionVal);
+            select.insertBefore(newOption, select.lastChild);
+        }
+
+      </script>
+</body>
+</html>
