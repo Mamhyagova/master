@@ -34,10 +34,6 @@ input {
     outline: none;
 }
 
-input:focus {
-    border: 1.5px solid rgb(91, 200, 236);
-}
-
 .save-btn , .add-btn{
     width: 60px;
     cursor: pointer;

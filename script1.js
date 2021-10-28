@@ -1,91 +1,112 @@
 
-function saveBtnValue() {
-  const textInput = document.getElementById("inputValue");
+function onSaveClick() {
+  const input = document.getElementById("input");
   const saveButton = document.getElementById("saveBtn");
-  const Selector = document.getElementById("select");
-  const textInputValue = textInput.value;
-  if (textInputValue.trim() === '') {
-    textInput.classList.add('errorStyle');
+  const selector = document.getElementById("select");
+  const inputValue = input.value;
+
+  if (inputValue.trim() === '') {
+    input.classList.add('errorStyle');
     saveButton.classList.add('errorStyle');
   }
+
   else {
-    const textInputValue = textInput.value;
-    const sel = Selector.selectedIndex;
-    const options = Selector.options;
-    options[sel].label = txtVal;
-    textInput.classList.remove('errorStyle');
+    const inputValue = input.value;
+    const selectIndex = selector.selectedIndex;
+    const options = selector.options;
+
+    options[selectIndex].label = inputValue;
+
+    input.classList.remove('errorStyle');
     saveButton.classList.remove('errorStyle');
   }
 };
 
-function insertInput (e) {
+function keydownInput(e) {
   const text = e.target.value;
   const saveButton = document.getElementById("saveBtn");
-  const textInput = document.getElementById("inputValue");
+  const input = document.getElementById("input");
   const addButton = document.getElementById("addBtn");
+
   if (text !== '') {
-    textInput.classList.remove('errorStyle');
+    input.classList.remove('errorStyle');
     saveButton.classList.remove('errorStyle');
     addButton.classList.remove('errorStyleAddBtn');
   }
 };
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("inputValue").addEventListener("keydown", insertInput );
-  document.getElementById("inputValue").addEventListener("onclick", insertInput );
 
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("input").addEventListener("keydown", keydownInput);
+  document.getElementById("input").addEventListener("input", onInputChange);
+  document.getElementById("saveBtn").addEventListener("click", onSaveClick); //onSaveClick / handleSave
+  document.getElementById("addBtn").addEventListener("click", onAddClick); //onAddClick / handleAdd
+  document.getElementById("select").addEventListener("change", selectChange); //onChange
 });
 
 
-function inputInsertValue() {
-  const textInputValue = textInput.value;
+function onInputChange() {
+  const input = document.getElementById("input");
   const saveButton = document.getElementById("saveBtn");
-  const textInput = document.getElementById("inputValue");
   const addButton = document.getElementById("addBtn");
-  if (textInputValue.trim() !== '') {
-    textInput.classList.remove('errorStyle');
+  const inputValue = input.value;
+  console.log(inputValue)
+  if (inputValue.trim() !== "") {
+    input.classList.remove('errorStyle');
     saveButton.classList.remove('errorStyle');
     addButton.classList.remove('errorStyleAddBtn');
   }
 };
 
-  
-
-
 function selectChange() {
-  const textInput = document.getElementById("inputValue");
-  const Selector = document.getElementById("select");
-  const sel = Selector.selectedIndex;
-  const options = Selector.options;
-  textInput.value = options[sel].label;
+  const input = document.getElementById("input");
+  const selector = document.getElementById("select");
+  const selectIndex = selector.selectedIndex;
+  const options = selector.options;
+  input.value = options[selectIndex].label;
 };
 
-function addOptionBtn() {
+function onAddClick() {
   const saveButton = document.getElementById("saveBtn");
-  const textInput = document.getElementById("inputValue");
-  const Selector = document.getElementById("select");
+  const input = document.getElementById("input");
+  const selector = document.getElementById("select");
   const addButton = document.getElementById("addBtn");
-  const textInputValue = textInput.value;
   const opts = document.querySelectorAll('option');
+  const inputValue = input.value;
+
   for (let i = 0; i < opts.length; i++) {
-    if (textInputValue.trim() === opts[i].label) {
+    if (inputValue.trim() === opts[i].label) {
       return alert('You can not create same home name')
     }
   }
-  if (textInputValue.trim() === '') {
-    textInput.classList.add('errorStyle');
+
+  if (inputValue.trim() === '') {
+    input.classList.add('errorStyle');
     saveButton.classList.add('errorStyle');
     addButton.classList.add('errorStyleAddBtn');
-  }
-  else {
-    const newOption = document.createElement("OPTION");
-    const newOptionVal = document.createTextNode(txtVal);
-    newOption.appendChild(newOptionVal);
-    Selector.insertBefore(newOption, Selector.lastChild);
-    const lastItem = Selector[Selector.length - 1];
-    Selector.selectedIndex = Selector.length - 1;
-    textInput.classList.remove('errorStyle');
+  } else {
+    const newOption = document.createElement("option");
+    const newOptionTxt = document.createTextNode(inputValue);
+    const savedItems = localStorage.getItem('savedItems');
+
+    newOption.appendChild(newOptionTxt);
+    selector.appendChild(newOption);
+    selector.selectedIndex = selector.length - 1;
+
+    input.classList.remove('errorStyle');
     saveButton.classList.remove('errorStyle');
     addButton.classList.remove('errorStyleAddBtn');
+
+    if (savedItems) {
+      const parsed = JSON.parse(savedItems);
+
+      parsed.push(inputValue);
+
+      localStorage.setItem('savedItems', JSON.stringify(parsed));
+    } else {
+      const items = [inputValue];
+
+      localStorage.setItem('savedItems', JSON.stringify(items));
+    }
   }
 };
 
@@ -93,6 +114,24 @@ document.addEventListener("keyup", (e) => {
   if (e.key === 'Enter') {
     insertValue();
   }
+});
+
+window.onload = function () {
+  const itemsFromLS = localStorage.getItem('savedItems');
+
+  if (itemsFromLS !== null) {
+    const parsed = JSON.parse(itemsFromLS);
+    const selector = document.getElementById("select");
+
+    for (let i = 0; i < parsed.length; i++) {
+      const newOption = document.createElement("option");
+      const newOptionVal = document.createTextNode(parsed[i]);
+
+      newOption.appendChild(newOptionVal);
+      selector.appendChild(newOption);
+    }
+  }
 }
-)
+
+
 
