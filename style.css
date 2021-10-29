@@ -1,0 +1,45 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url(fonts/Roboto-Regular.ttf);
+}
+
+body{
+    font-family:'Roboto';
+    font-size: 20px;
+}
+
+.done{
+    text-decoration: line-through;
+}   
+
+.hidden {
+    display: none;
+}
+
+.clr{
+    color: aqua;
+}
+
+
+ul {
+    padding-left: 0;
+
+}
+
+li {
+    list-style-type: none;
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+}
+
+li:not(:last-child){
+    margin-bottom: 15px;
+}
+
+button, input {
+    height: 30px;
+    border-radius: 10px;
+    border-color: burlywood;
+    text-decoration: none;
+}
