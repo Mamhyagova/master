@@ -49,7 +49,6 @@ function onInputChange() {
   const saveButton = document.getElementById("saveBtn");
   const addButton = document.getElementById("addBtn");
   const inputValue = input.value;
-  console.log(inputValue)
   if (inputValue.trim() !== "") {
     input.classList.remove('errorStyle');
     saveButton.classList.remove('errorStyle');
