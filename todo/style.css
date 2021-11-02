@@ -1,0 +1,164 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url(fonts/Roboto-Regular.ttf);
+}
+
+body{
+    font-family:'Roboto';
+    font-size: 16px;
+    background-color: #e2e2e2;
+}
+
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 30px;
+    padding-bottom: 30px;
+    max-width: 320px;
+}
+
+h1{
+    text-align: center;
+    color: #dab8b8;
+    font-size: 70px;
+    margin: 0;
+}
+
+.todo-container{
+    display: flex;
+    flex-direction: column;
+    border:1px solid #e2e2e2;
+    background-color: #fff;
+    width: 312px;
+    padding-bottom: 5px;
+}
+
+
+
+.input-container{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.markAllBtn{
+    height: 20px;
+    width: 30px;
+    background-image: url(/images/arrow.svg);
+    background-repeat: no-repeat;
+    background-size:20px;
+    border: none;
+    background-color: #fff;
+    background-position: center bottom;
+    margin-right: 5px;
+}
+
+input {
+    width: 256px;
+    margin-bottom: 0;
+    padding: 10px 5px;
+    border:none;
+    font-size: 16px;
+    margin-left: -5px;
+    outline: none;
+}
+
+
+ul{
+    padding: 0;
+    margin: 0;
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+.liContainer{
+    display: flex;
+    padding-left: 12px;
+}
+
+li {
+    list-style-type: none;
+    display: flex;
+    width: 308px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px;
+    border-bottom:1px solid #e2e2e2;
+}
+
+.inputCheck{
+    width: 10px;
+    margin-right: 15px;
+}
+
+label {
+    display: flex;
+}
+
+
+.deleteBtn{
+    border: none;
+    height: 30px;
+    width: 30px;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-color: #fff;
+}
+
+.deleteBtn:hover{
+    border: none;
+    background-image: url(/images/x.svg);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-color: #fff;
+}
+
+.btns-container{
+    display: flex;
+    justify-content: space-between;
+    align-items:baseline;
+    padding:0 5px;
+}
+
+.main-btn-container{
+    display: flex;
+    justify-content: space-between;
+
+}
+button, .result{
+    color: #868686;
+}
+
+.btnDeleteCompleted{
+    padding: 0;
+}
+
+.btnDeleteCompleted:hover{
+    text-decoration: underline;
+}
+
+.footer-btn, .result{
+    font-size: 11px;
+    border: none;
+    background-color: #fff;
+}
+
+.footerBtnActive{
+    border: 1px solid #a09b9b;
+    border-radius: 5px;
+}
+
+.footer-btns{
+    border: 1px solid #e2e2e2;
+}
+
+.done{
+    text-decoration: line-through;
+    color: #a09b9b;
+}  
+
+.hidden {
+    display: none;
+}

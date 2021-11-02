@@ -1,43 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<style>
-    @font-face {
-        font-family: 'Roboto';
-        src: url(fonts/Roboto-Regular.ttf);
-    }
-
-    body{
-        font-family:'Roboto';
-    }
-    .done{
-        text-decoration: line-through;
-    }
-    .hidden {
-        display: none;
-    }
-    .clr{
-        color: aqua;
-    }
-    
-</style>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="style.css" rel="stylesheet">
 </head>
 
 <body>
     <script src="/main.js"></script>
-    <input type="text" name="" id="input">
-    <button id="addBtn">Add</button>
-    <ul id="list"></ul>
-
-    <button id="btnAll">All</button>
-    <button id="btnActive">Active</button>
-    <button id="btnCompleted">Completed</button>
-
+    <div class="container">
+        <h1>todos</h1>
+        <div class="todo-container">
+            <div class="input-container">
+                <button id="markAllBtn" class="markAllBtn"></button>
+                <input type="text" name="" id="input">
+            </div>
+            <ul id="list" class="ul"></ul>
+            <div id="btns-container" class="btns-container">
+                <div class="result" id="result"></div>
+                <div class="main-btn-container">
+                    <button id="btnAll" class="footer-btn">All</button>
+                    <button id="btnActive" class="footer-btn">Active</button>
+                    <button id="btnCompleted" class="footer-btn">Completed</button>
+                </div>
+                <button id="btnDeleteCompleted" class="footer-btn btnDeleteCompleted">Clear completed</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
