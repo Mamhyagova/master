@@ -1,89 +1,93 @@
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("btnAll").addEventListener("click", onAllClick);
-    document.getElementById("btnActive").addEventListener("click", onActiveClick);
-    document.getElementById("btnCompleted").addEventListener("click", onCompletedClick);
-    document.getElementById("btnDeleteCompleted").addEventListener("click", onDeleteCompletedClick);
-    document.getElementById("markAllBtn").addEventListener("click", onMarkAllClick);
-});
+// document.addEventListener("DOMContentLoaded", () => {
+document.getElementById("btnAll").addEventListener("click", filterAll);
+document.getElementById("btnActive").addEventListener("click", filterActive);
+document.getElementById("btnCompleted").addEventListener("click", filterCompleted);
+document.getElementById("btnDeleteCompleted").addEventListener("click", onDeleteCompletedClick);
+document.getElementById("markAllBtn").addEventListener("click", checkAllCheckboxes);
+// });
+
 
 function onAddEnter() {
     const input = document.getElementById("input");
     const list = document.getElementById("list");
-    const markAllBtn = document.getElementById("markAllBtn");
-    const btnsContainer = document.getElementById("btns-container")
     const inputValue = input.value
-
-    const li = document.createElement('li');
-    const liContainer = document.createElement('div');
-    const labelValue = document.createElement('label');
-    const inputCheck = document.createElement('input');
-    const deleteBtn = document.createElement('button');
-
     if (inputValue.trim() === "") {
         return false
     } else {
-        
-        liContainer.id = "liContainer";
-        li.id = "listItem";
-        labelValue.id = "labelValue"
-        inputCheck.id = "inputCheck";
-        
-        inputCheck.type = "checkbox";
-        
+        const li = document.createElement('li');
+        const liContainer = document.createElement('div');
+        const labelValue = document.createElement('label');
+        const checkbox = document.createElement('input');
+        const deleteBtn = document.createElement('button');
+        const btnAll = document.getElementById("btnAll");
+        li.classList.add("listItem");
+        labelValue.classList.add("labelValue");
+        liContainer.classList.add("liContainer")
+        deleteBtn.classList.add("deleteBtn");
+        checkbox.classList.add("checkbox");
+
+        const test = document.querySelectorAll('input[type="checkbox"]')
+
+        const id = test.length + 1;
+
+        checkbox.id = `checkbox-${id}`;
+        labelValue.setAttribute("for", `checkbox-${id}`) ; 
+
+        checkbox.type = "checkbox";
         labelValue.textContent = inputValue;
-        
-        liContainer.append(inputCheck);
+
+
+        liContainer.append(checkbox);
         liContainer.append(labelValue);
         li.append(liContainer);
         li.append(deleteBtn);
         list.append(li);
-        
-        
-        liContainer.classList.add("liContainer")
-        deleteBtn.classList.add("deleteBtn");
-        inputCheck.classList.add("inputCheck");
-        
+
         deleteBtn.addEventListener("click", onDeleteClick);
-        inputCheck.addEventListener("change", onCheckboxChange);
-        
-        let result= document.getElementById("result");
-        let listItems = document.querySelectorAll("#listItem").length
-        result.textContent = (`${listItems} items left `)
+        checkbox.addEventListener("change", onCheckboxChange);
+
+        document.getElementById("input").value = '';
+
+        calculateItemsLeft()
+        highlightFilterBtns()
+        btnAll.classList.add("footerBtnIsActive");
     }
 };
 
 document.addEventListener("keyup", (e) => {
     if (e.key === 'Enter') {
         onAddEnter()
-        document.getElementById("input").value = '';
     }
 });
 
-function onCheckboxChange(e) {
-    const checkBoxes = document.querySelectorAll('input[type="checkbox"]');
-    const labelValue = document.querySelectorAll('#labelValue');
+function onCheckboxChange() {
+    const checkBoxes = document.getElementsByClassName('checkbox');
+    const labelValue = document.getElementsByClassName('labelValue');
     for (i = 0; i < checkBoxes.length; i++) {
-        if (checkBoxes[i].checked === true) {
+        if (checkBoxes[i].checked) {
             labelValue[i].classList.add("done")
+            calculateItemsLeft()
         } else {
             labelValue[i].classList.remove("done")
+            calculateItemsLeft()
         }
     }
 };
 
-function onMarkAllClick() {
+function checkAllCheckboxes() {
     const checkBoxes = document.querySelectorAll('input[type="checkbox"]');
-    const isAllChecked = Array.from(checkBoxes).every(item => item.checked)
-
-    if (isAllChecked === false) {
-        checkBoxes.forEach(item => {
-            item.checked = true;
-            onCheckboxChange();
-        })
-    } else {
+    const isAllChecked = Array.from(checkBoxes).every(item => item.checked);
+    if (isAllChecked === true) {
         checkBoxes.forEach(item => {
             item.checked = false;
             onCheckboxChange();
+            calculateItemsLeft()
+        })
+    } else {
+        checkBoxes.forEach(item => {
+            item.checked = true;
+            onCheckboxChange();
+            calculateItemsLeft()
         })
     }
 };
@@ -92,40 +96,51 @@ function onDeleteClick(e) {
     const list = document.getElementById("list");
     const listItem = e.target.parentElement;
     list.removeChild(listItem);
-    let result= document.getElementById("result");
-    let listItems = document.querySelectorAll("#listItem").length
-    result.textContent = (`${listItems} items left `)
+
+    calculateItemsLeft()
 };
 
-function onAllClick() {
+function calculateItemsLeft() {
+    const result = document.getElementById("result");
+    const listItems = document.getElementsByClassName("listItem").length;
+    const markedDone = document.querySelectorAll("label.done");
+    if (markedDone.length = 0) {
+        result.textContent = (`${listItems} items left `)
+    } else {
+        result.textContent = (`${listItems - markedDone.length} items left `)
+    }
+};
+
+function highlightFilterBtns() {
+    const btnAll = document.getElementById("btnAll");
+    const activeBtn = document.getElementById("btnActive");
+    const btnCompleted = document.getElementById("btnCompleted");
+
+    btnAll.classList.remove("footerBtnIsActive");
+    activeBtn.classList.remove("footerBtnIsActive");
+    btnCompleted.classList.remove("footerBtnIsActive");
+}
+
+function filterAll() {
     const listItem = document.querySelectorAll("ul > li.hidden");
 
-    const btnAll = document.getElementById ("btnAll");
-    const activeBtn = document.getElementById ("btnActive");
-    const btnCompleted = document.getElementById ("btnCompleted");
-
-    activeBtn.classList.remove("footerBtnActive");
-    btnCompleted.classList.remove("footerBtnActive");
-
-    btnAll.classList.add("footerBtnActive");
+    highlightFilterBtns()
+    const btnAll = document.getElementById("btnAll");
+    btnAll.classList.add("footerBtnIsActive");
 
     for (let item of listItem) {
         item.classList.remove("hidden")
     }
 };
 
-function onActiveClick() {
+function filterActive() {
     const checkBoxes = document.querySelectorAll('input[type="checkbox"]');
     const listItem = document.querySelectorAll("li");
 
-    const activeBtn = document.getElementById ("btnActive");
-    const btnAll = document.getElementById ("btnAll");
-    const btnCompleted = document.getElementById ("btnCompleted");
+    highlightFilterBtns()
+    const activeBtn = document.getElementById("btnActive");
+    activeBtn.classList.add("footerBtnIsActive");
 
-    btnAll.classList.remove("footerBtnActive");
-    btnCompleted.classList.remove("footerBtnActive");
-
-    activeBtn.classList.add("footerBtnActive");
     for (i = 0; i < checkBoxes.length; i++) {
         if (checkBoxes[i].checked === true) {
             listItem[i].classList.add("hidden")
@@ -135,24 +150,19 @@ function onActiveClick() {
     }
 };
 
-function onCompletedClick() {
+function filterCompleted() {
     const checkBoxes = document.querySelectorAll('input[type="checkbox"]');
     const listItem = document.querySelectorAll("li");
 
-    const activeBtn = document.getElementById ("btnActive");
-    const btnAll = document.getElementById ("btnAll");
-    const btnCompleted = document.getElementById ("btnCompleted");
-
-    btnAll.classList.remove("footerBtnActive");
-    activeBtn.classList.remove("footerBtnActive");
-
-    btnCompleted.classList.add("footerBtnActive");
+    highlightFilterBtns()
+    const btnCompleted = document.getElementById("btnCompleted");
+    btnCompleted.classList.add("footerBtnIsActive");
 
     for (i = 0; i < checkBoxes.length; i++) {
-        if (checkBoxes[i].checked === false) {
-            listItem[i].classList.add("hidden")
-        } else {
+        if (checkBoxes[i].checked === true) {
             listItem[i].classList.remove("hidden")
+        } else {
+            listItem[i].classList.add("hidden")
         }
     }
 };
@@ -161,14 +171,11 @@ function onCompletedClick() {
 function onDeleteCompletedClick() {
     const checkBoxes = document.querySelectorAll('input[type="checkbox"]');
     const listItem = document.querySelectorAll("li");
-    
 
     for (i = 0; i < checkBoxes.length; i++) {
         if (checkBoxes[i].checked === true) {
             listItem[i].remove()
-            let result= document.getElementById("result");
-            let listItems = document.querySelectorAll("#listItem").length
-            result.textContent = (`${listItems} items left `)
+            calculateItemsLeft()
         }
     }
 };

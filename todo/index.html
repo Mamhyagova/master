@@ -10,19 +10,19 @@
 </head>
 
 <body>
-    <script src="/main.js"></script>
+    
     <div class="container">
         <h1>todos</h1>
         <div class="todo-container">
             <div class="input-container">
                 <button id="markAllBtn" class="markAllBtn"></button>
-                <input type="text" name="" id="input">
+                <input type="text" name="" class="input" id="input" placeholder="What needs to be done?">
             </div>
             <ul id="list" class="ul"></ul>
             <div id="btns-container" class="btns-container">
                 <div class="result" id="result"></div>
                 <div class="main-btn-container">
-                    <button id="btnAll" class="footer-btn">All</button>
+                    <button id="btnAll" class="footer-btn allBtn">All</button>
                     <button id="btnActive" class="footer-btn">Active</button>
                     <button id="btnCompleted" class="footer-btn">Completed</button>
                 </div>
@@ -30,6 +30,8 @@
             </div>
         </div>
     </div>
+
+    <script src="/main.js"></script>
 </body>
 
 </html>
