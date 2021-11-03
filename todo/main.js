@@ -26,9 +26,7 @@ function onAddEnter() {
         deleteBtn.classList.add("deleteBtn");
         checkbox.classList.add("checkbox");
 
-        const test = document.querySelectorAll('input[type="checkbox"]')
-
-        const id = test.length + 1;
+        const id = +new Date();
 
         checkbox.id = `checkbox-${id}`;
         labelValue.setAttribute("for", `checkbox-${id}`) ; 
