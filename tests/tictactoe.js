@@ -1,6 +1,6 @@
-const ex = "x";
-const circle = "circle";
-const winningCombinations = [
+const X_MARK = "x";
+const CIRCLE_MARK = "circle";
+const COMBO = [
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
@@ -13,9 +13,11 @@ const winningCombinations = [
 const board = document.getElementById("board");
 const whoIsWinner = document.getElementById("winner");
 const restartBtn = document.getElementById("newGame");
+const turnTracker = document.getElementById("turn");
 
-let circleTurn;
+let currentPlayer;
 
+let gameIsOver = false;
 
 for (let i = 0; i < 9; i++) {
   const square = document.createElement("div");
@@ -26,73 +28,70 @@ for (let i = 0; i < 9; i++) {
 
 const cellElements = document.querySelectorAll(".cell");
 
-startGame()
+startGame();
 
-restartBtn.addEventListener("click", startGame());
+restartBtn.addEventListener("click", startGame);
 
 function startGame() {
-  circleTurn = false
-  cellElements.forEach(cell => {
-    cell.classList.remove(ex)
-    cell.classList.remove(circle)
-    cell.removeEventListener("click", handleClick)
+  gameIsOver = false;
+  currentPlayer = true;
+  cellElements.forEach((cell) => {
+    cell.classList.remove(X_MARK);
+    cell.classList.remove(CIRCLE_MARK);
+    cell.removeEventListener("click", handleClick);
     cell.addEventListener("click", handleClick, { once: true });
-  })
-  setBoard()
-  whoIsWinner.innerHTML= "";
+  });
+  whoIsWinner.innerHTML = "";
 }
 
 function handleClick(e) {
+  if (gameIsOver) {
+    return;
+  }
   const cell = e.target;
-  const currentClass = circleTurn ? ex : circle;
-  placeMark(cell, currentClass);
-  if (checkWin (currentClass)) {
+  const currentMark = currentPlayer ? X_MARK : CIRCLE_MARK;
+  turnTracker.innerHTML = `Now is ${currentPlayer ? "O" : "X"} turn`;
+  placeMark(cell, currentMark);
+  if (checkWin(currentMark)) {
     endGame(false);
   } else if (isDraw()) {
     endGame(true);
   } else {
     swapTurn();
-    setBoard()
   }
 }
 
 function endGame(draw) {
   if (draw) {
     whoIsWinner.innerHTML = ` It's a draw`;
+    turnTracker.innerHTML = ``;
+    gameIsOver = true;
   } else {
-    whoIsWinner.innerHTML = ` ${circleTurn ? "O" : "X"} is winner!`;
-    
+    whoIsWinner.innerHTML = ` ${currentPlayer ? "X" : "O"} is winner!`;
+    gameIsOver = true;
+    turnTracker.innerHTML = ``;
   }
 }
 
 function isDraw() {
-  return [...cellElements].every(cell => {
-    return cell.classList.contains(ex) || cell.classList.contains(circle);
+  return [...cellElements].every((cell) => {
+    return cell.classList.contains(X_MARK) || cell.classList.contains(CIRCLE_MARK);
   });
 }
 
-function placeMark(cell, currentClass) {
-  cell.classList.add(currentClass);
+function placeMark(cell, currentMark) {
+  cell.classList.add(currentMark);
 }
 
 function swapTurn() {
-  circleTurn = !circleTurn;
+  currentPlayer = !currentPlayer;
 }
 
-function setBoard() {
-  board.classList.remove(ex)
-  board.classList.remove(circle)
-  if (circleTurn) {
-    board.classList.add(circle)
-  } else {
-    board.classList.add(ex)
-  }
-}
 
-function checkWin(currentClass) {
-  return winningCombinations.some(combination => {
-    return combination.every(index => {
-      return cellElements[index].classList.contains(currentClass);
+function checkWin(currentMark) {
+  return COMBO.some((combination) => {
+    return combination.every((index) => {
+      return cellElements[index].classList.contains(currentMark);
     });
   });
 }
