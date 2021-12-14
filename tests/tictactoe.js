@@ -1,5 +1,6 @@
 const X_MARK = "x";
-const CIRCLE_MARK = "circle";
+const CIRCLE_MARK = "o";
+
 const COMBO = [
   [0, 1, 2],
   [3, 4, 5],
@@ -14,16 +15,60 @@ const board = document.getElementById("board");
 const whoIsWinner = document.getElementById("winner");
 const restartBtn = document.getElementById("newGame");
 const turnTracker = document.getElementById("turn");
+const selectMode = document.getElementById("select");
+const gameContainer = document.getElementById("gameContainer");
+
+selectMode.addEventListener("change", modeSelector);
+const currentMode = selectMode.value;
+var boardSize = parseInt(currentMode);
 
 let currentPlayer;
 
 let gameIsOver = false;
+createArea();
 
-for (let i = 0; i < 9; i++) {
-  const square = document.createElement("div");
-  square.classList.add("cell");
-  square.dataset.squareId = i;
-  board.appendChild(square);
+function createArea() {
+  var mas = [];
+  for (var i = 0; i < boardSize; i++) {
+    mas[i] = [];
+    for (var j = 0; j < boardSize; j++) {
+      mas[i][j] = null;
+    }
+
+    const square = document.createElement("div");
+    square.classList.add("cell");
+    square.dataset.squareId = i;
+    board.appendChild(square);
+  }
+}
+
+function modeSelector() {
+  const currentMode = selectMode.value;
+  var boardSize = parseInt(currentMode);
+  var x = boardSize * boardSize;
+  startGame();
+  clearBoard();
+  createArea(x);
+  if (x === 16) {
+    board.classList.add("medWidth");
+    gameContainer.classList.add("medWidth");
+    board.classList.remove("largeWidth");
+    gameContainer.classList.remove("largeWidth");
+  } else if (x === 25) {
+    board.classList.add("largeWidth");
+    gameContainer.classList.add("largeWidth");
+  } else {
+    board.classList.remove("medWidth", "largeWidth");
+    gameContainer.classList.remove("medWidth", "largeWidth");
+  }
+}
+
+function clearBoard() {
+  var allCells = document.getElementsByClassName("cell");
+
+  while (allCells[0]) {
+    allCells[0].parentNode.removeChild(allCells[0]);
+  }
 }
 
 const cellElements = document.querySelectorAll(".cell");
@@ -42,6 +87,7 @@ function startGame() {
     cell.addEventListener("click", handleClick, { once: true });
   });
   whoIsWinner.innerHTML = "";
+  turnTracker.innerHTML = "You are the X player";
 }
 
 function handleClick(e) {
@@ -75,7 +121,9 @@ function endGame(draw) {
 
 function isDraw() {
   return [...cellElements].every((cell) => {
-    return cell.classList.contains(X_MARK) || cell.classList.contains(CIRCLE_MARK);
+    return (
+      cell.classList.contains(X_MARK) || cell.classList.contains(CIRCLE_MARK)
+    );
   });
 }
 
@@ -86,7 +134,6 @@ function placeMark(cell, currentMark) {
 function swapTurn() {
   currentPlayer = !currentPlayer;
 }
-
 
 function checkWin(currentMark) {
   return COMBO.some((combination) => {

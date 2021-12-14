@@ -1,93 +1,129 @@
 @font-face {
-    font-family: "FuzzyBubbles"; 
-    src: url("/fonts/FuzzyBubbles-Regular.ttf") format("truetype"); 
-    font-style: normal; 
-    font-weight: 400; 
-} 
-body{
-    display: flex;
+  font-family: "FuzzyBubbles";
+  src: url("/fonts/FuzzyBubbles-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+body {
+  display: flex;
 }
 
 * {
-    font-family:  "FuzzyBubbles";
+  font-family: "FuzzyBubbles";
 }
 
-.container{
-    margin-left: auto;
-    margin-right: auto;
+.container {
+  margin-left: auto;
+  margin-right: auto;
 }
 
-h1{
-    text-align: center;
+h1 {
+  text-align: center;
 }
 
-.game{
-    width: 340px;
+.game {
+  width: 340px;
 }
 
-.newGame{
-    text-align: center;
-    cursor: pointer;
+select {
+  border:  none;
+  width: 100px;
+  height: 30px;
+  font-size: 18px;
+  text-align: center;
+  border-radius: 10px;
+  background-color: rgb(255, 255, 255);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+.newGame {
+  text-align: center;
+  cursor: pointer;
 }
 
 .turn {
-    text-align: center;
-    font-size: 24px; 
-    margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
-.winner{
-    text-align: center;
-    font-size: 34px;
+.winner {
+  text-align: center;
+  font-size: 34px;
 }
 
-.newGame{
-    border: 1px solid black;
-    width: 170px;
-    height: 30px;
-    margin-right: auto;
-    margin-left: auto;
-    padding-top: 10px;
-    border-radius: 50px;
+.newGame {
+  border: 1px solid black;
+  width: 170px;
+  height: 30px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 10px;
+  border-radius: 50px;
 }
 
-.newGame:hover{
-    background-color: black;
-    color: white;
+.newGame:hover {
+  background-color: black;
+  color: white;
 }
 
-.board{
-    display: flex;
-    width: 340px;
-    flex-wrap: wrap;
-    border-collapse: collapse;
-    margin-bottom: 30px;
+.board {
+  display: flex;
+  width: 340px;
+  flex-wrap: wrap;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  width: 340px;
 }
 
-.cell{
-    width: 100px;
-    height: 100px;
-    border: 1px solid rgb(228, 228, 228);
-    background-color: rgb(255, 255, 255);
-    border-radius: 15px;
-    margin: 5px;
-    
+.medWidth{
+  width: 450px;
+}
+
+.largeWidth{
+  width: 560px;
+}
+
+
+.cell {
+  width: 100px;
+  height: 100px;
+  border: 1px solid rgb(228, 228, 228);
+  background-color: rgb(255, 255, 255);
+  border-radius: 15px;
+  margin: 5px;
 }
 
 .cell.x,
-.cell.circle {
+.cell.o {
   cursor: not-allowed;
 }
 
-.cell.x{
-    background: url("/x-symbol-svgrepo-com.svg") no-repeat center;
-    background-size: 80px;
-    background-color: rgb(92, 176, 255);
+.cell.x {
+  background: url("/x-symbol-svgrepo-com.svg") no-repeat center;
+  background-size: 80px;
+  background-color: rgb(92, 176, 255);
 }
 
-.cell.circle {
-    background: url("/1210522.svg") no-repeat center;
-    background-size: 80px;
-    background-color: rgb(255, 115, 115);
+.cell.o {
+  background: url("/1210522.svg") no-repeat center;
+  background-size: 80px;
+  background-color: rgb(255, 115, 115);
 }
+
+
+.test{
+  max-width: 94px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.star{
+  background: url(/star.png);
+  max-width:100%;
+}
+
 

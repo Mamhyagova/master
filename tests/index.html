@@ -10,17 +10,27 @@
   <body>
     <div class="container">
       <h1>Tic Tac Toe</h1>
-      <div class="game">
-        <table class="board" id="board">
-        </table>
+      <div class="game" id="gameContainer">
+        <table class="board" id="board"></table>
         <div class="footer-container">
+          <select name="select" id="select">
+            <option value="3" selected>3x3</option>
+            <option value="4">4x4</option>
+            <option value="5">5x5</option>
+          </select>
           <div class="winner" id="winner"></div>
           <div class="turn" id="turn">You are the X player</div>
           <div class="newGame" id="newGame">Let's play again!</div>
         </div>
       </div>
+      <div class="test">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+      </div>
     </div>
-			
-        <script src="tictactoe.js"></script>
+
+    <script src="tictactoe.js"></script>
   </body>
 </html>
