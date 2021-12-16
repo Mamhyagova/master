@@ -1,16 +1,6 @@
 const X_MARK = "x";
 const CIRCLE_MARK = "o";
 
-const COMBO = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6],
-];
 const board = document.getElementById("board");
 const whoIsWinner = document.getElementById("winner");
 const restartBtn = document.getElementById("newGame");
@@ -23,38 +13,37 @@ const currentMode = selectMode.value;
 var boardSize = parseInt(currentMode);
 
 let currentPlayer;
+var arr = [];
 
 let gameIsOver = false;
-createArea();
+createArea(boardSize);
 
-function createArea() {
-  var mas = [];
+function createArea(boardSize) {
   for (var i = 0; i < boardSize; i++) {
-    mas[i] = [];
+    arr[i] = [];
     for (var j = 0; j < boardSize; j++) {
-      mas[i][j] = null;
+      arr[i][j] = null;
+      const square = document.createElement("div");
+      square.classList.add("cell");
+      board.appendChild(square);
+      const [x, y] = [i, j];
+      square.addEventListener("click", (e) => handleClick(e, x, y));
     }
-
-    const square = document.createElement("div");
-    square.classList.add("cell");
-    square.dataset.squareId = i;
-    board.appendChild(square);
   }
 }
 
 function modeSelector() {
   const currentMode = selectMode.value;
   var boardSize = parseInt(currentMode);
-  var x = boardSize * boardSize;
-  startGame();
   clearBoard();
-  createArea(x);
-  if (x === 16) {
+  createArea(boardSize);
+  startGame();
+  if (boardSize === 4) {
     board.classList.add("medWidth");
     gameContainer.classList.add("medWidth");
     board.classList.remove("largeWidth");
     gameContainer.classList.remove("largeWidth");
-  } else if (x === 25) {
+  } else if (boardSize === 5) {
     board.classList.add("largeWidth");
     gameContainer.classList.add("largeWidth");
   } else {
@@ -71,49 +60,53 @@ function clearBoard() {
   }
 }
 
-const cellElements = document.querySelectorAll(".cell");
+var cellElements = document.querySelectorAll(".cell");
 
 startGame();
 
 restartBtn.addEventListener("click", startGame);
 
 function startGame() {
+  var cellElements = document.querySelectorAll(".cell");
+
   gameIsOver = false;
   currentPlayer = true;
   cellElements.forEach((cell) => {
     cell.classList.remove(X_MARK);
     cell.classList.remove(CIRCLE_MARK);
-    cell.removeEventListener("click", handleClick);
-    cell.addEventListener("click", handleClick, { once: true });
   });
   whoIsWinner.innerHTML = "";
   turnTracker.innerHTML = "You are the X player";
 }
 
-function handleClick(e) {
+function handleClick(e, i, j) {
   if (gameIsOver) {
     return;
   }
   const cell = e.target;
   const currentMark = currentPlayer ? X_MARK : CIRCLE_MARK;
-  turnTracker.innerHTML = `Now is ${currentPlayer ? "O" : "X"} turn`;
-  placeMark(cell, currentMark);
-  if (checkWin(currentMark)) {
+  if (!cell.classList.contains("x") && !cell.classList.contains("o")) {
+    cell.classList.add(currentMark);
+    swapTurn();
+  } else {
+    return false;
+  }
+  arr[i][j] = currentPlayer ? 1 : 2;
+  turnTracker.innerHTML = `Now is ${currentPlayer ? "X" : "O"} turn`;
+  if (checkWin()) {
     endGame(false);
   } else if (isDraw()) {
     endGame(true);
-  } else {
-    swapTurn();
   }
 }
 
 function endGame(draw) {
   if (draw) {
-    whoIsWinner.innerHTML = ` It's a draw`;
+    whoIsWinner.innerHTML = `It's a draw`;
     turnTracker.innerHTML = ``;
     gameIsOver = true;
   } else {
-    whoIsWinner.innerHTML = ` ${currentPlayer ? "X" : "O"} is winner!`;
+    whoIsWinner.innerHTML = ` ${currentPlayer ? "O" : "X"} is winner!`;
     gameIsOver = true;
     turnTracker.innerHTML = ``;
   }
@@ -127,18 +120,30 @@ function isDraw() {
   });
 }
 
-function placeMark(cell, currentMark) {
-  cell.classList.add(currentMark);
-}
-
 function swapTurn() {
   currentPlayer = !currentPlayer;
 }
 
-function checkWin(currentMark) {
-  return COMBO.some((combination) => {
-    return combination.every((index) => {
-      return cellElements[index].classList.contains(currentMark);
-    });
-  });
+/**
+ * Берем первое значение из переданной строки (х или 0)
+ * в цикле проверяем равен ли текущий элемент с перввому
+ * если он не равен - возвращаем null
+ * если равен ничкго не делаем
+ * на выходе из цикла возвращаем первый элемент
+
+**/
+
+function checkRows() {
+  const first = arr[0];
+
+  return arr[1] === first && arr[2] === first ? first : null; 
+}
+
+function checkWin() {
+  const rowsResult = checkRows();
+  if (rowsResult !== null) {
+    return endGame(false);
+  }
+    console.log(`arrs`, arr[1])
+  
 }
