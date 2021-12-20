@@ -11,7 +11,6 @@ const gameContainer = document.getElementById("gameContainer");
 selectMode.addEventListener("change", modeSelector);
 const currentMode = selectMode.value;
 var boardSize = parseInt(currentMode);
-
 let currentPlayer;
 var arr = [];
 
@@ -19,9 +18,9 @@ let gameIsOver = false;
 createArea(boardSize);
 
 function createArea(boardSize) {
-  for (var i = 0; i < boardSize; i++) {
+  for (let i = 0; i < boardSize; i++) {
     arr[i] = [];
-    for (var j = 0; j < boardSize; j++) {
+    for (let j = 0; j < boardSize; j++) {
       arr[i][j] = null;
       const square = document.createElement("div");
       square.classList.add("cell");
@@ -93,7 +92,7 @@ function handleClick(e, i, j) {
   }
   arr[i][j] = currentPlayer ? 1 : 2;
   turnTracker.innerHTML = `Now is ${currentPlayer ? "X" : "O"} turn`;
-  if (checkWin()) {
+  if (checkWin(i, j)) {
     endGame(false);
   } else if (isDraw()) {
     endGame(true);
@@ -124,26 +123,54 @@ function swapTurn() {
   currentPlayer = !currentPlayer;
 }
 
-/**
- * Берем первое значение из переданной строки (х или 0)
- * в цикле проверяем равен ли текущий элемент с перввому
- * если он не равен - возвращаем null
- * если равен ничкго не делаем
- * на выходе из цикла возвращаем первый элемент
-
-**/
-
-function checkRows() {
-  const first = arr[0];
-
-  return arr[1] === first && arr[2] === first ? first : null; 
+function checkRows(i) {
+  let row = arr[i];
+  let firstElement = row[0];
+  return row.every((square) => firstElement === square);
 }
 
-function checkWin() {
-  const rowsResult = checkRows();
-  if (rowsResult !== null) {
+function checkColumns(i) {
+  var col = arr.map(function (value, i) {
+    return value[i];
+  });
+  let winner = col[0];
+  let hasWinner = true;
+  for (let i = 1; i < col.length; i++) {
+    hasWinner = hasWinner && winner === col[i];
+  }
+  return hasWinner;
+}
+
+function checkMainDiagonal() {
+  let winner = arr[0][0];
+  let hasWinner = true;
+  for (let i = 1; i < arr.length; i++) {
+    hasWinner = hasWinner && winner === arr[i][i];
+  }
+  return hasWinner;
+}
+
+function checkSideDiagonal() {
+  let winner = arr[0][arr.length - 1];
+  let hasWinner = true;
+  for (let i = 1; i < arr.length; i++) {
+    hasWinner = hasWinner && winner === arr[i][arr.length - 1 - i];
+  }
+  return hasWinner;
+}
+
+function checkWin(i, j) {
+  let rowsResult = checkRows(i);
+  let columnResult = checkColumns(i);
+  let mainDiagonalResult = checkMainDiagonal();
+  let sideDiagonalResult = checkSideDiagonal();
+  if (rowsResult === true) {
+    return endGame(false);
+  } else if (columnResult === true) {
+    return endGame(false);
+  } else if (mainDiagonalResult === true) {
+    return endGame(false);
+  } else if (sideDiagonalResult === true) {
     return endGame(false);
   }
-    console.log(`arrs`, arr[1])
-  
 }
